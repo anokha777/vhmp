@@ -1,5 +1,5 @@
 name: vhmp_nissan
-description: A new Flutter project.
+description: Vehicle helth monitoring and prognastics.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,6 +19,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  http: any
+  shared_preferences: any
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -30,7 +32,7 @@ dev_dependencies:
 
 
 # For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
+# following page: https://www.dartlang.org/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
