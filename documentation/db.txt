@@ -1,4 +1,4 @@
-db.errorMaster.insert({
+db.errorMasters.insert({
   "createDatetime": new Date(),
   "errorCode": "p0300",
   "description": "Random/Multiple Cylinder Misfire Detected",
@@ -8,7 +8,7 @@ db.errorMaster.insert({
   "diagnosticSteps": "Using a scan tool pull codes and see if there are any other besides P0300. Address the others first, Inspect whether there are loose open or short wires in ignition coils, Inspect whether spark plugs and their wires are in good condition, Check that fuel pressure is within the recommended range, Inspect fuel injectors to see whether they are in good condition"
 })
 
-db.errorMaster.insert({
+db.errorMasters.insert({
   "createDatetime": new Date(),
   "errorCode": "p0301",
   "description": "Cylinder 1 Misfire Detected",
@@ -18,7 +18,7 @@ db.errorMaster.insert({
   "diagnosticSteps": "Using a scan tool pull codes and see if there are any other besides P0301. Address the others first, Inspect whether there are loose open or short wires in ignition coils in cylinder 1, Inspect whether cylinder 1 spark plugs and their wires are in good condition, Check that fuel pressure is within the recommended range, Inspect fuel injectors to see whether they are in good condition"
 })
 
-db.errorMaster.insert({
+db.errorMasters.insert({
   "createDatetime": new Date(),
   "errorCode": "p0302",
   "description": "Cylinder 2 Misfire Detected",
@@ -28,7 +28,7 @@ db.errorMaster.insert({
   "diagnosticSteps": "Using a scan tool pull codes and see if there are any other besides P0302. Address the others first, Inspect whether there are loose open or short wires in ignition coils in cylinder 2, Inspect whether cylinder 2 spark plugs and their wires are in good condition, Check that fuel pressure is within the recommended range, Inspect fuel injectors to see whether they are in good condition"
 })
 
-db.errorMaster.insert({
+db.errorMasters.insert({
   "createDatetime": new Date(),
   "errorCode": "p0303",
   "description": "Cylinder 3 Misfire Detected",
@@ -38,7 +38,7 @@ db.errorMaster.insert({
   "diagnosticSteps": "Using a scan tool pull codes and see if there are any other besides P0303. Address the others first, Inspect whether there are loose open or short wires in ignition coils in cylinder 3, Inspect whether cylinder 3 spark plugs and their wires are in good condition, Check that fuel pressure is within the recommended range, Inspect fuel injectors to see whether they are in good condition"
 })
 
-db.errorMaster.insert({
+db.errorMasters.insert({
   "createDatetime": new Date(),
   "errorCode": "p0304",
   "description": "Cylinder 4 Misfire Detected",
@@ -48,7 +48,7 @@ db.errorMaster.insert({
   "diagnosticSteps": "Using a scan tool pull codes and see if there are any other besides P0304. Address the others first, Inspect whether there are loose open or short wires in ignition coils in cylinder 4, Inspect whether cylinder 4 spark plugs and their wires are in good condition, Check that fuel pressure is within the recommended range, Inspect fuel injectors to see whether they are in good condition"
 })
 
-db.errorMaster.insert({
+db.errorMasters.insert({
   "createDatetime": new Date(),
   "errorCode": "p0305",
   "description": "Cylinder 5 Misfire Detected",
@@ -58,7 +58,7 @@ db.errorMaster.insert({
   "diagnosticSteps": "Using a scan tool pull codes and see if there are any other besides P0305. Address the others first, Inspect whether there are loose open or short wires in ignition coils in cylinder 5, Inspect whether cylinder 5 spark plugs and their wires are in good condition, Check that fuel pressure is within the recommended range, Inspect fuel injectors to see whether they are in good condition"
 })
 
-db.errorMaster.insert({
+db.errorMasters.insert({
   "createDatetime": new Date(),
   "errorCode": "p0306",
   "description": "Cylinder 6 Misfire Detected",
