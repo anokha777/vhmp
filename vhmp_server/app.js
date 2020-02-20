@@ -3,7 +3,7 @@ const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const userRouter = require('./src/routers/userRouter');
+const userRouter = require('./src/routers/router');
 
 const app = express();
 app.use(helmet());

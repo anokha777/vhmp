@@ -17,6 +17,7 @@ const UserSchema = new Schema({
   mobileNum: { type: String, require: true },
   username: { type: String, required : true },
   password: { type: String, required : true },
+  role: { type: String, required: true },
   vehicleModel: { type: String, required :false }, // Only for car users
   address: { type: String, required: false }, // Only for service center
   createdAt: { type: Date, default: Date.now() },

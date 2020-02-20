@@ -84,6 +84,7 @@ const userController = {
                     mobileNum: response.mobileNum,
                     username: response.username,
                     vehicleModel: response.vehicleModel,
+                    role: response.role,
                     createdAt: response.createdAt
                   });
               })
@@ -133,7 +134,8 @@ const userController = {
                 name: user[0].name,
                 mobileNum: user[0].mobileNum,
                 username: user[0].username,
-                vehicleNum: user[0].vehicleNum,
+                role: user[0].role,
+                vehicleModel: user[0].vehicleModel,
               });
             } else {
               res.status(401).json({
