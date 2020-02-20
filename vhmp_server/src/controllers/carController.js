@@ -59,38 +59,39 @@ const carController = {
   },
 
   getCarIssueRequestListByServiceCenterUserid: (req, res, next) => {
-    CarIssueRequestModel.find({ selectedServiceCenter: req.params.userid }, (err, carIssueList) => {
-      console.log('carIssueList----', carIssueList);
-      let carIssueRequestList = [];
-      if (err) {
-        throw err;
-      } else {
+    let carIssueRequestList = [];
+    CarIssueRequestModel.find({ selectedServiceCenter: req.params.userid }).then(carIssueList => {
+      // console.log('carIssueList--------------', carIssueList);
+
         if(carIssueList.length > 0) {
-          carIssueList.forEach(carIssueReq => {
-            CarIssueModel.findById(carIssueReq.currentCarIssue, (err, carErrorDetails) => {
-              console.log('carErrorDetails----------------------', carErrorDetails);
-              UserModel.findById(carErrorDetails.carOwner, (err, carOwnerDatails) => {
-                carIssueRequestList.push({
-                  _id: carIssueReq.selectedServiceCenter,
-                  carOwnerDatail: {
-                    name: carOwnerDatails.name,
-                    mobileNum: carOwnerDatails.mobileNum,
-                    username: carOwnerDatails.username,
-                    role: carOwnerDatails.role, 
-                    vehicleModel: carOwnerDatails.vehicleModel
-                  },
-                  carErrorDetails
+
+          // let carIssueRequestList = [];
+          carIssueList.forEach(function(ci) {
+            carIssueRequestList.push(CarIssueModel.findById(ci.currentCarIssue).then((carIssue) => {
+              return UserModel.findById(carIssue.carOwner).then((carOwnerDatails) => {
+                return ErrorMasterModel.findById(carIssue.carError).then((carErrorDetails) => {
+                  return {
+                    _id: ci._id,
+                    carOwnerDatails: {
+                      _id: carOwnerDatails._id,
+                      name: carOwnerDatails.name,
+                      mobileNum: carOwnerDatails.mobileNum,
+                      username: carOwnerDatails.username,
+                      vehicleModel: carOwnerDatails.vehicleModel,
+                      role: carOwnerDatails.role
+                    },
+                    carErrorDetails
+                  };
                 });
-                
               });
-            }).then(() => {
-              return res.status(200).json({ carIssueRequestList });
-            });
+            }));
           });
+          return Promise.all(carIssueRequestList);
         }
-        
-        
-      }
+    }).then(function(carIssueRequestList) {
+        res.send(carIssueRequestList);
+      }).catch(function(error) {
+        res.status(500).send('Fetching issue logged by car owner failed...', error);
     });
   }
   
