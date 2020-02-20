@@ -1,0 +1,69 @@
+db.errorMaster.insert({
+  "createDatetime": new Date(),
+  "errorCode": "p0300",
+  "description": "Random/Multiple Cylinder Misfire Detected",
+  "meaning": "PCM has detected that there’s an engine cylinder that’s not firing properly. It could be one or more cylinders. PCM hasn’t specified the exact cylinder",
+  "mainSymptoms": "Check Engine Light comes on, Check Engine Light may flash, Engine lacks power, Engine may be hard to start, Engine may stumble and hesitate frequently",
+  "possibleCauses": "Defective or worn out spark plugs, Low fuel pressure, Vacuum leak, Defective catalytic converter, Defective fuel injector, Defective coil, Defective camshaft position sensor, Defective crankshaft sensor, Problem with distributor",
+  "diagnosticSteps": "Using a scan tool pull codes and see if there are any other besides P0300. Address the others first, Inspect whether there are loose open or short wires in ignition coils, Inspect whether spark plugs and their wires are in good condition, Check that fuel pressure is within the recommended range, Inspect fuel injectors to see whether they are in good condition"
+})
+
+db.errorMaster.insert({
+  "createDatetime": new Date(),
+  "errorCode": "p0301",
+  "description": "Cylinder 1 Misfire Detected",
+  "meaning": "PCM has detected that cylinder #1 is not firing properly",
+  "mainSymptoms": "Check Engine Light comes on, Check Engine Light may flash, Engine lacks power, Engine may be hard to start, Engine may stumble and hesitate frequently",
+  "possibleCauses": "Defective or worn out spark plugs in cylinder 1, Low fuel pressure, Vacuum leak, Defective catalytic converter, Defective fuel injector, Defective coil, Defective camshaft position sensor, Defective crankshaft sensor, Problem with distributor",
+  "diagnosticSteps": "Using a scan tool pull codes and see if there are any other besides P0301. Address the others first, Inspect whether there are loose open or short wires in ignition coils in cylinder 1, Inspect whether cylinder 1 spark plugs and their wires are in good condition, Check that fuel pressure is within the recommended range, Inspect fuel injectors to see whether they are in good condition"
+})
+
+db.errorMaster.insert({
+  "createDatetime": new Date(),
+  "errorCode": "p0302",
+  "description": "Cylinder 2 Misfire Detected",
+  "meaning": "PCM has detected that cylinder #2 is not firing properly",
+  "mainSymptoms": "Check Engine Light comes on, Check Engine Light may flash, Engine lacks power, Engine may be hard to start, Engine may stumble and hesitate frequently",
+  "possibleCauses": "Defective or worn out spark plugs in cylinder 2, Low fuel pressure, Vacuum leak, Defective catalytic converter, Defective fuel injector, Defective coil, Defective camshaft position sensor, Defective crankshaft sensor, Problem with distributor",
+  "diagnosticSteps": "Using a scan tool pull codes and see if there are any other besides P0302. Address the others first, Inspect whether there are loose open or short wires in ignition coils in cylinder 2, Inspect whether cylinder 2 spark plugs and their wires are in good condition, Check that fuel pressure is within the recommended range, Inspect fuel injectors to see whether they are in good condition"
+})
+
+db.errorMaster.insert({
+  "createDatetime": new Date(),
+  "errorCode": "p0303",
+  "description": "Cylinder 3 Misfire Detected",
+  "meaning": "PCM has detected that cylinder #3 is not firing properly",
+  "mainSymptoms": "Check Engine Light comes on, Check Engine Light may flash, Engine lacks power, Engine may be hard to start, Engine may stumble and hesitate frequently",
+  "possibleCauses": "Defective or worn out spark plugs in cylinder 3, Low fuel pressure, Vacuum leak, Defective catalytic converter, Defective fuel injector, Defective coil, Defective camshaft position sensor, Defective crankshaft sensor, Problem with distributor",
+  "diagnosticSteps": "Using a scan tool pull codes and see if there are any other besides P0303. Address the others first, Inspect whether there are loose open or short wires in ignition coils in cylinder 3, Inspect whether cylinder 3 spark plugs and their wires are in good condition, Check that fuel pressure is within the recommended range, Inspect fuel injectors to see whether they are in good condition"
+})
+
+db.errorMaster.insert({
+  "createDatetime": new Date(),
+  "errorCode": "p0304",
+  "description": "Cylinder 4 Misfire Detected",
+  "meaning": "PCM has detected that cylinder #4 is not firing properly",
+  "mainSymptoms": "Check Engine Light comes on, Check Engine Light may flash, Engine lacks power, Engine may be hard to start, Engine may stumble and hesitate frequently",
+  "possibleCauses": "Defective or worn out spark plugs in cylinder 4, Low fuel pressure, Vacuum leak, Defective catalytic converter, Defective fuel injector, Defective coil, Defective camshaft position sensor, Defective crankshaft sensor, Problem with distributor",
+  "diagnosticSteps": "Using a scan tool pull codes and see if there are any other besides P0304. Address the others first, Inspect whether there are loose open or short wires in ignition coils in cylinder 4, Inspect whether cylinder 4 spark plugs and their wires are in good condition, Check that fuel pressure is within the recommended range, Inspect fuel injectors to see whether they are in good condition"
+})
+
+db.errorMaster.insert({
+  "createDatetime": new Date(),
+  "errorCode": "p0305",
+  "description": "Cylinder 5 Misfire Detected",
+  "meaning": "PCM has detected that cylinder #5 is not firing properly",
+  "mainSymptoms": "Check Engine Light comes on, Check Engine Light may flash, Engine lacks power, Engine may be hard to start, Engine may stumble and hesitate frequently",
+  "possibleCauses": "Defective or worn out spark plugs in cylinder 5, Low fuel pressure, Vacuum leak, Defective catalytic converter, Defective fuel injector, Defective coil, Defective camshaft position sensor, Defective crankshaft sensor, Problem with distributor",
+  "diagnosticSteps": "Using a scan tool pull codes and see if there are any other besides P0305. Address the others first, Inspect whether there are loose open or short wires in ignition coils in cylinder 5, Inspect whether cylinder 5 spark plugs and their wires are in good condition, Check that fuel pressure is within the recommended range, Inspect fuel injectors to see whether they are in good condition"
+})
+
+db.errorMaster.insert({
+  "createDatetime": new Date(),
+  "errorCode": "p0306",
+  "description": "Cylinder 6 Misfire Detected",
+  "meaning": "PCM has detected that cylinder #6 is not firing properly",
+  "mainSymptoms": "Check Engine Light comes on, Check Engine Light may flash, Engine lacks power, Engine may be hard to start, Engine may stumble and hesitate frequently",
+  "possibleCauses": "Defective or worn out spark plugs in cylinder 6, Low fuel pressure, Vacuum leak, Defective catalytic converter, Defective fuel injector, Defective coil, Defective camshaft position sensor, Defective crankshaft sensor, Problem with distributor",
+  "diagnosticSteps": "Using a scan tool pull codes and see if there are any other besides P0306. Address the others first, Inspect whether there are loose open or short wires in ignition coils in cylinder 6, Inspect whether cylinder 6 spark plugs and their wires are in good condition, Check that fuel pressure is within the recommended range, Inspect fuel injectors to see whether they are in good condition"
+})
