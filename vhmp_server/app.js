@@ -1,15 +1,18 @@
 const express = require('express');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const userRouter = require('./src/routers/userRouter');
 
 const app = express();
 app.use(helmet());
+app.use(cors());
 
 //Body Parser middleware
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
+
 
 const port = 5000;
 

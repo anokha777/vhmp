@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
+const geocoder = require('../utils/geoCoder');
 const config = require('../config/config');
 
 const UserModel = require('../models/UserModel');
@@ -17,7 +18,7 @@ const userController = {
         near: {
          'type': 'Point',
           'coordinates': [parseFloat(lng), parseFloat(lat)] }, 
-          maxDistance: 10000,
+          maxDistance: 100000,
           spherical: true, 
           distanceField: "dis" 
          }
@@ -39,27 +40,56 @@ const userController = {
             res.status(409).send({ msg: 'User name already taken, Please try with other.' });
           } else {
             bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
-            UserModel.create({
-              name: req.body.name,
-              mobileNum: req.body.mobileNum,
-              username: req.body.username,
-              password: hash,
-              vehicleNum: req.body.vehicleNum,
-              location: req.body.location
-              // location: { type: 'point', coordinates: [-80, 25.791] }
-            }).then(response => {
-                res.set('Content-Type', 'application/json');
-                res.status(201).send({
-                  id: response._id,
-                  name: response.name,
-                  mobileNum: response.mobileNum,
-                  username: response.username,
-                  vehicleNum: response.vehicleNum,
-                  location: response.location,
-                  createdAt: response.createdAt,
-                  msg: 'User registered successfully!!!'
+              if(req.body.role === config.ROLE_SERVICE_CENTER) {
+                let cordFromAddress = '';
+                geocoder.geocode(req.body.address, function(err, geocoderRes) {
+                  console.log('---888----------------', geocoderRes);
+                  cordFromAddress =  { type: 'point', coordinates: [ geocoderRes[0].longitude, geocoderRes[0].latitude ] };
+                  UserModel.create({
+                    name: req.body.name,
+                    mobileNum: req.body.mobileNum,
+                    username: req.body.username,
+                    password: hash,
+                    role: req.body.role,
+                    address: req.body.address,
+                    location: cordFromAddress
+                    // location: { type: 'point', coordinates: [-80, 25.791] }
+                  }).then(response => {
+                      res.set('Content-Type', 'application/json');
+                      res.status(201).send({
+                        id: response._id,
+                        name: response.name,
+                        mobileNum: response.mobileNum,
+                        username: response.username,
+                        role: response.role,
+                        address: response.address,
+                        location: response.location,
+                        createdAt: response.createdAt
+                      });
+                  })
                 });
-            })
+            } else {
+              UserModel.create({
+                name: req.body.name,
+                mobileNum: req.body.mobileNum,
+                username: req.body.username,
+                password: hash,
+                vehicleModel: req.body.vehicleModel,
+                role: req.body.role
+              }).then(response => {
+                  res.set('Content-Type', 'application/json');
+                  res.status(201).send({
+                    id: response._id,
+                    name: response.name,
+                    mobileNum: response.mobileNum,
+                    username: response.username,
+                    vehicleModel: response.vehicleModel,
+                    createdAt: response.createdAt
+                  });
+              })
+            }
+
+
             });
           }
         });
