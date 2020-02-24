@@ -1,0 +1,3 @@
+# To clean cache
+1. rm -rf ~/.gradle/caches/
+2. flutter clean

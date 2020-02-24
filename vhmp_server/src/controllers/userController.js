@@ -23,7 +23,8 @@ const userController = {
           distanceField: "dis" 
          }
          ).then(function(responseServiceCenters){
-         res.send(responseServiceCenters);
+          res.set('Content-Type', 'application/json');
+         res.status(200).send(responseServiceCenters);
         });
       } catch (error) {
           next();
@@ -31,32 +32,32 @@ const userController = {
   },
 
   registerUser: (req, res, next) => {
-    console.log('req.body----------------------------', req.body);
+    console.log('registerUser req.body----------------------------', req.body);
     const saltRounds = 10;
     try {
-      UserModel.find({ username: req.body.username })
+      UserModel.find({ username: req.body.username.trim() })
         .exec().then((user) => {
           if (user.length > 0) {
             res.status(409).send({ msg: 'User name already taken, Please try with other.' });
           } else {
-            bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
+            bcrypt.hash(req.body.password.trim(), saltRounds, function (err, hash) {
               if(req.body.role === config.ROLE_SERVICE_CENTER) {
                 let cordFromAddress = '';
-                geocoder.geocode(req.body.address, function(err, geocoderRes) {
+                geocoder.geocode(req.body.address.trim(), function(err, geocoderRes) {
                   console.log('---888----------------', geocoderRes);
                   cordFromAddress =  { type: 'point', coordinates: [ geocoderRes[0].longitude, geocoderRes[0].latitude ] };
                   UserModel.create({
-                    name: req.body.name,
-                    mobileNum: req.body.mobileNum,
-                    username: req.body.username,
+                    name: req.body.name.trim(),
+                    mobileNum: req.body.mobileNum.trim(),
+                    username: req.body.username.trim(),
                     password: hash,
                     role: req.body.role,
-                    address: req.body.address,
+                    address: req.body.address.trim(),
                     location: cordFromAddress
                     // location: { type: 'point', coordinates: [-80, 25.791] }
                   }).then(response => {
                       res.set('Content-Type', 'application/json');
-                      res.status(201).send({
+                      res.status(200).send({
                         id: response._id,
                         name: response.name,
                         mobileNum: response.mobileNum,
@@ -78,7 +79,7 @@ const userController = {
                 role: req.body.role
               }).then(response => {
                   res.set('Content-Type', 'application/json');
-                  res.status(201).send({
+                  res.status(200).send({
                     id: response._id,
                     name: response.name,
                     mobileNum: response.mobileNum,
@@ -114,7 +115,9 @@ const userController = {
   },
 
   loginUser: (req, res, next) => {
-    UserModel.find({ username: req.body.username })
+    console.log('req.body---username---------', req.body.username.trim().length);
+    console.log('req.body---pass---------', req.body.password.trim().length);
+    UserModel.find({ username: req.body.username.trim() })
       .exec()
       .then((user) => {
         if (user.length < 1) {
@@ -122,10 +125,13 @@ const userController = {
             msg: 'Auth failed',
           });
         } else {
-          bcrypt.compare(req.body.password, user[0].password, function (err, compareRes) {
+          console.log('sdfghjklkhgfdsasdfghjklkjhgfdsdfghjklhgfdsdfghjk');
+          bcrypt.compare(req.body.password.trim(), user[0].password, function (err, compareRes) {
+            console.log('compareRes---------------------', compareRes);
             if (compareRes === true) {
               /* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
               const token = jwt.sign({ sub: user[0]._id, username: user[0].username }, config.secret, { expiresIn: '1h' });
+              console.log('token----', token);
               return res.status(200).json({
                 msg: 'Auth successful',
                 token,

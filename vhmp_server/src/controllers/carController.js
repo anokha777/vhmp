@@ -18,12 +18,15 @@ const carController = {
     CarIssueModel.find({ carOwner: req.params.userid }, (err, carIssue) => {
       if (err) {
         throw err;
+      } else if(carIssue.length < 1) {
+        return res.status(200).json([]);
       } else {
         ErrorMasterModel.findById(carIssue[0].carError, (err, carErrorDetails) => {
           UserModel.findById(carIssue[0].carOwner, (err, carOwnerDatails) => {
-            return res.status(200).json({
-              id: carIssue[0]._id,
+            return res.status(200).json([{
+              carIssueId: carIssue[0]._id,
               carOwnerDatail: {
+                id: carOwnerDatails._id,
                 name: carOwnerDatails.name,
                 mobileNum: carOwnerDatails.mobileNum,
                 username: carOwnerDatails.username,
@@ -31,7 +34,24 @@ const carController = {
                 vehicleModel: carOwnerDatails.vehicleModel
               },
               carErrorDetails
-            });
+            }
+            // ,
+            // {
+            //   id: 'carIssue[0]._id',
+            //   carOwnerDatail: {
+            //     id: 'carOwnerDatails._id',
+            //     name: 'carOwnerDatails.name',
+            //     mobileNum: 'carOwnerDatails.mobileNum',
+            //     username: 'carOwnerDatails.username',
+            //     role: 'carOwnerDatails.role', 
+            //     vehicleModel: 'carOwnerDatails.vehicleModel'
+            //   },
+            //   carErrorDetails: {
+            //     errorCode: 'errorCode',
+            //     description: 'description'
+            //   }
+            // }
+          ]);
           });
         });
         
@@ -50,7 +70,7 @@ const carController = {
         selectedTime: req.body.selectedTime
       }).then(response => {
           res.set('Content-Type', 'application/json');
-          res.status(201).send({ response });
+          res.status(200).send({ response });
       })
     } catch (error) {
       console.log('error--------------', error);
