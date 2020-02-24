@@ -1,17 +1,33 @@
 import 'package:flutter/material.dart';
+import 'home_car_owner.dart';
 import 'schedule_appointment.dart';
 import 'loginPage.dart';
+import '../utils/get_my_past_appointment_list.dart';
 
 class NearByServiceCenterList extends StatelessWidget {
-  String currentCarIssue;
+  String user_id;
   String name;
+  String mobileNum;
   String username;
+  String role;
+  String vehicleModel;
+
+  String currentCarIssue;
   String errorCode;
   String errorDescription;
   List<dynamic> nearByServiceCenterList;
 
-  NearByServiceCenterList(this.currentCarIssue, this.name, this.username,
-      this.errorCode, this.errorDescription, this.nearByServiceCenterList);
+  NearByServiceCenterList(
+      this.user_id,
+      this.name,
+      this.mobileNum,
+      this.username,
+      this.role,
+      this.vehicleModel,
+      this.currentCarIssue,
+      this.errorCode,
+      this.errorDescription,
+      this.nearByServiceCenterList);
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +58,30 @@ class NearByServiceCenterList extends StatelessWidget {
               accountEmail: new Text(username),
             ),
             new ListTile(
+              title: new Text("Home"),
+              trailing: new Icon(Icons.home),
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+                builder: (BuildContext context) => HomeCarOwner(
+                    this.user_id,
+                    this.name,
+                    this.mobileNum,
+                    this.username,
+                    this.role,
+                    this.vehicleModel),
+              )),
+            ),
+            new ListTile(
               title: new Text("Previous Requests"),
               trailing: new Icon(Icons.label_important),
-              onTap: () => Navigator.of(context).push(new MaterialPageRoute(
-                builder: (BuildContext context) => Text("Hi"),
-              )),
+              onTap: () => getMyPastAppointmentList(
+                this.user_id,
+                this.name,
+                this.mobileNum,
+                this.username,
+                this.role,
+                this.vehicleModel,
+                context,
+              ),
             ),
           ],
         ),
@@ -68,8 +103,12 @@ class NearByServiceCenterList extends StatelessWidget {
               onTap: () => Navigator.of(context).push(
                 new MaterialPageRoute(
                   builder: (BuildContext context) => ScheduleAnAppointment(
+                      user_id,
                       name,
+                      mobileNum,
                       username,
+                      role,
+                      vehicleModel,
                       currentCarIssue,
                       errorCode,
                       errorDescription,

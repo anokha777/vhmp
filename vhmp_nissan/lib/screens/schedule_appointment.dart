@@ -3,14 +3,20 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'home_car_owner.dart';
 
 import 'loginPage.dart';
 import '../utils/constants.dart' as Constants;
 import '../utils/alert_util.dart';
+import '../utils/get_my_past_appointment_list.dart';
 
 class ScheduleAnAppointment extends StatefulWidget {
+  String user_id;
   String name;
+  String mobileNum;
   String username;
+  String role;
+  String vehicleModel;
   String currentCarIssue;
   String errorCode;
   String errorDescription;
@@ -18,8 +24,12 @@ class ScheduleAnAppointment extends StatefulWidget {
   String serviceCenterId;
 
   ScheduleAnAppointment(
+      this.user_id,
       this.name,
+      this.mobileNum,
       this.username,
+      this.role,
+      this.vehicleModel,
       this.currentCarIssue,
       this.errorCode,
       this.errorDescription,
@@ -97,7 +107,7 @@ class ScheduleAnAppointmentState extends State<ScheduleAnAppointment> {
             child: new Flexible(
                 child: new TextField(
                     decoration: InputDecoration(
-                        hintText: "Start",
+                        hintText: "Schedule Time",
                         contentPadding:
                             EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                         border: OutlineInputBorder(
@@ -127,7 +137,7 @@ class ScheduleAnAppointmentState extends State<ScheduleAnAppointment> {
             child: new Flexible(
                 child: new TextField(
                     decoration: InputDecoration(
-                        hintText: "Date",
+                        hintText: "Schedule Date",
                         contentPadding:
                             EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                         border: OutlineInputBorder(
@@ -169,11 +179,30 @@ class ScheduleAnAppointmentState extends State<ScheduleAnAppointment> {
               accountEmail: new Text(widget.username),
             ),
             new ListTile(
+              title: new Text("Home"),
+              trailing: new Icon(Icons.home),
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+                builder: (BuildContext context) => HomeCarOwner(
+                    widget.user_id,
+                    widget.name,
+                    widget.mobileNum,
+                    widget.username,
+                    widget.role,
+                    widget.vehicleModel),
+              )),
+            ),
+            new ListTile(
               title: new Text("Previous Requests"),
               trailing: new Icon(Icons.label_important),
-              onTap: () => Navigator.of(context).push(new MaterialPageRoute(
-                builder: (BuildContext context) => Text("Hi"),
-              )),
+              onTap: () => getMyPastAppointmentList(
+                widget.user_id,
+                widget.name,
+                widget.mobileNum,
+                widget.username,
+                widget.role,
+                widget.vehicleModel,
+                context,
+              ),
             ),
           ],
         ),
@@ -212,7 +241,8 @@ class ScheduleAnAppointmentState extends State<ScheduleAnAppointment> {
                               dateInputController.text,
                               startTimeController.text,
                               widget.currentCarIssue,
-                              widget.serviceCenterId);
+                              widget.serviceCenterId,
+                              widget.user_id);
                         }
                       },
                       color: isButtonEnabled ? Colors.blueAccent : Colors.grey,
@@ -229,12 +259,17 @@ class ScheduleAnAppointmentState extends State<ScheduleAnAppointment> {
     );
   }
 
-  submitScheduleAppointment(String selectedDate, String selectedTime,
-      String currentCarIssue, String serviceCenterId) async {
+  submitScheduleAppointment(
+      String selectedDate,
+      String selectedTime,
+      String currentCarIssue,
+      String serviceCenterId,
+      String requesterCarOwner) async {
     print("Called submitScheduleAppointment()----$selectedDate, $selectedTime");
     Map data = {
       'currentCarIssue': currentCarIssue,
       'selectedServiceCenter': serviceCenterId,
+      'requesterCarOwner': requesterCarOwner,
       'selectedDate': selectedDate,
       'selectedTime': selectedTime
     };

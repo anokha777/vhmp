@@ -66,7 +66,8 @@ const carController = {
       CarIssueRequestModel.create({
         currentCarIssue: req.body.currentCarIssue,
         selectedServiceCenter: req.body.selectedServiceCenter,
-        selectedDate: new Date(req.body.selectedDate),
+        requesterCarOwner: req.body.requesterCarOwner,
+        selectedDate: req.body.selectedDate,
         selectedTime: req.body.selectedTime
       }).then(response => {
           res.set('Content-Type', 'application/json');
@@ -78,7 +79,40 @@ const carController = {
     }
   },
 
-  getCarIssueRequestListByServiceCenterUserid: (req, res, next) => {
+  getMyCarIssueRequestList: (req, res, next) => {
+    let myCarIssueRequestList = [];
+    CarIssueRequestModel.find({ requesterCarOwner: req.params.userid }).then(carIssueRequestModelList => {
+      console.log('carIssueRequestModelList------------', carIssueRequestModelList.length);
+      if(carIssueRequestModelList.length > 0) {
+        carIssueRequestModelList.forEach(function(ci) {
+          myCarIssueRequestList.push(CarIssueModel.findById(ci.currentCarIssue).then((carIssue) => {
+            return UserModel.findById(ci.selectedServiceCenter).then((serviceCenterDetail) => { // service center user details
+              return ErrorMasterModel.findById(carIssue.carError).then((carErrorDetails) => {
+                return {
+                  carIssueRequestId: ci._id,
+                  // currentCarIssue: {type: Schema.Types.ObjectId, ref: 'carissue'},
+                  selectedServiceCenter: serviceCenterDetail,
+                  requesterCarOwner: ci.requesterCarOwner,
+                  selectedDate: ci.selectedDate,
+                  selectedTime: ci.selectedTime,
+                  requestState: ci.requestState,
+                  createDatetime: ci.createDatetime,
+                  carErrorDetails
+                };
+              });
+            });
+          }));
+        });
+        return Promise.all(myCarIssueRequestList);
+      }
+    }).then(function(myCarIssueRequestList) {
+      res.send(myCarIssueRequestList);
+    }).catch(function(error) {
+      res.status(500).send('Fetching issue logged by car owner failed...', error);
+  });
+  },
+
+  getCarIssueRequestListForServiceCenter: (req, res, next) => {
     let carIssueRequestList = [];
     CarIssueRequestModel.find({ selectedServiceCenter: req.params.userid }).then(carIssueList => {
       // console.log('carIssueList--------------', carIssueList);

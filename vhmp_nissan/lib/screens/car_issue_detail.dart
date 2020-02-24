@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'home_car_owner.dart';
 import 'dart:convert';
 
 import 'nearby_service_center_list.dart';
 import 'loginPage.dart';
 import '../utils/constants.dart' as Constants;
 import '../utils/alert_util.dart';
+import '../utils/get_my_past_appointment_list.dart';
 
 class CarIssueDetails extends StatelessWidget {
   String user_id;
@@ -47,9 +49,13 @@ class CarIssueDetails extends StatelessWidget {
         Navigator.of(context).push(
           new MaterialPageRoute(
             builder: (BuildContext context) => NearByServiceCenterList(
-                carIssueId,
+                user_id,
                 name,
+                mobileNum,
                 username,
+                role,
+                vehicleModel,
+                carIssueId,
                 errorCode,
                 errorDescription,
                 jsonResponse),
@@ -67,7 +73,7 @@ class CarIssueDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Issues list", style: TextStyle(color: Colors.white)),
+        title: Text("Issue Details", style: TextStyle(color: Colors.white)),
         actions: <Widget>[
           FlatButton(
             onPressed: () {
@@ -91,11 +97,30 @@ class CarIssueDetails extends StatelessWidget {
               accountEmail: new Text(username),
             ),
             new ListTile(
+              title: new Text("Home"),
+              trailing: new Icon(Icons.home),
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+                builder: (BuildContext context) => HomeCarOwner(
+                    this.user_id,
+                    this.name,
+                    this.mobileNum,
+                    this.username,
+                    this.role,
+                    this.vehicleModel),
+              )),
+            ),
+            new ListTile(
               title: new Text("Previous Requests"),
               trailing: new Icon(Icons.label_important),
-              onTap: () => Navigator.of(context).push(new MaterialPageRoute(
-                builder: (BuildContext context) => Text("Hi"),
-              )),
+              onTap: () => getMyPastAppointmentList(
+                user_id,
+                name,
+                mobileNum,
+                username,
+                role,
+                vehicleModel,
+                context,
+              ),
             ),
           ],
         ),

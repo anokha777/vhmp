@@ -1,31 +1,28 @@
 import 'package:flutter/material.dart';
 import 'home_car_owner.dart';
-import 'car_issue_detail.dart';
 import 'loginPage.dart';
-import '../utils/get_my_past_appointment_list.dart';
 
-class DiagnoseResponseList extends StatelessWidget {
+class MyPastAppointmentList extends StatelessWidget {
   String user_id;
   String name;
   String mobileNum;
   String username;
   String role;
   String vehicleModel;
-  List<dynamic> diagnoseJsonResponse;
+  List<dynamic> myPastAppointmentList;
 
-  DiagnoseResponseList(this.user_id, this.name, this.mobileNum, this.username,
-      this.role, this.vehicleModel, this.diagnoseJsonResponse);
+  MyPastAppointmentList(this.user_id, this.name, this.mobileNum, this.username,
+      this.role, this.vehicleModel, this.myPastAppointmentList);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Issues list", style: TextStyle(color: Colors.white)),
+        title:
+            Text("My Past Appointments", style: TextStyle(color: Colors.white)),
         actions: <Widget>[
           FlatButton(
             onPressed: () {
-//              sharedPreferences.clear();
-//              sharedPreferences.commit();
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
                     builder: (BuildContext context) => LoginPage(),
@@ -59,45 +56,33 @@ class DiagnoseResponseList extends StatelessWidget {
             new ListTile(
               title: new Text("Previous Requests"),
               trailing: new Icon(Icons.label_important),
-              onTap: () => getMyPastAppointmentList(
-                user_id,
-                name,
-                mobileNum,
-                username,
-                role,
-                vehicleModel,
-                context,
-              ),
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+                builder: (BuildContext context) => MyPastAppointmentList(
+                    user_id,
+                    name,
+                    mobileNum,
+                    username,
+                    role,
+                    vehicleModel,
+                    myPastAppointmentList),
+              )),
             ),
           ],
         ),
       ),
       body: new ListView.builder(
         itemCount:
-            diagnoseJsonResponse == null ? 0 : diagnoseJsonResponse.length,
+            myPastAppointmentList == null ? 0 : myPastAppointmentList.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
             child: ListTile(
               title: Text(
-                diagnoseJsonResponse[index]["carErrorDetails"]["errorCode"],
+                myPastAppointmentList[index]["selectedServiceCenter"]["name"],
               ),
               subtitle: Text(
-                diagnoseJsonResponse[index]["carErrorDetails"]["description"],
+                '${myPastAppointmentList[index]["carErrorDetails"]["description"]} (${myPastAppointmentList[index]['selectedDate']} | ${myPastAppointmentList[index]['selectedTime']})',
               ),
-              trailing: Icon(Icons.description),
-              onTap: () => Navigator.of(context).push(
-                new MaterialPageRoute(
-                  builder: (BuildContext context) => CarIssueDetails(
-                      user_id,
-                      name,
-                      mobileNum,
-                      username,
-                      role,
-                      vehicleModel,
-                      diagnoseJsonResponse,
-                      index),
-                ),
-              ),
+              trailing: Text(myPastAppointmentList[index]['requestState']),
             ),
           );
         },

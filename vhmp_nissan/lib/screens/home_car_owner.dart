@@ -3,10 +3,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speech_recognition/speech_recognition.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:vhmp_nissan/utils/get_my_past_appointment_list.dart';
 
 import 'loginPage.dart';
 import 'diagnose_response_list.dart';
 import '../utils/constants.dart' as Constants;
+import '../utils/get_my_past_appointment_list.dart';
 
 class HomeCarOwner extends StatefulWidget {
   String user_id;
@@ -65,7 +67,6 @@ class _HomeCarOwnerState extends State<HomeCarOwner> {
   @override
   Widget build(BuildContext context) {
     diagnoseMyCar(String user_id) async {
-      print('user is: $user_id');
       var jsonResponse = null;
       var response =
           await http.get("${Constants.BACKEND_URL}/api/car/diagnose/$user_id");
@@ -122,11 +123,30 @@ class _HomeCarOwnerState extends State<HomeCarOwner> {
               accountEmail: new Text(widget.username),
             ),
             new ListTile(
+              title: new Text("Home"),
+              trailing: new Icon(Icons.home),
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+                builder: (BuildContext context) => HomeCarOwner(
+                    widget.user_id,
+                    widget.name,
+                    widget.mobileNum,
+                    widget.username,
+                    widget.role,
+                    widget.vehicleModel),
+              )),
+            ),
+            new ListTile(
               title: new Text("Previous Requests"),
               trailing: new Icon(Icons.label_important),
-              onTap: () => Navigator.of(context).push(new MaterialPageRoute(
-                builder: (BuildContext context) => Text("Hi"),
-              )),
+              onTap: () => getMyPastAppointmentList(
+                widget.user_id,
+                widget.name,
+                widget.mobileNum,
+                widget.username,
+                widget.role,
+                widget.vehicleModel,
+                context,
+              ),
             ),
           ],
         ),

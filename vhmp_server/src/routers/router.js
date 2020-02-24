@@ -23,7 +23,10 @@ appRouter.route('/car/issue')
   .post(carController.carIssueRequestSubmit);
 
 appRouter.route('/car/issue/:userid') // userid is of service center
-  .get(carController.getCarIssueRequestListByServiceCenterUserid);
+  .get(carController.getCarIssueRequestListForServiceCenter);
+
+appRouter.route('/car/issuelistforowner/:userid') // userid is of car owner
+  .get(carController.getMyCarIssueRequestList);
 
 appRouter.route('/byid/:id')
   .get(userController.getUserById);
