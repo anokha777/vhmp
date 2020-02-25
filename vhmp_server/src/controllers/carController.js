@@ -14,6 +14,17 @@ require('../models/ErrorMasterModel');
 const ErrorMasterModel= mongoose.model('errormaster');
 
 const carController = {
+  updateCarAppointmentState: (req, res, next) => {
+    
+      CarIssueRequestModel.findByIdAndUpdate(req.params.carIssueRequestModelId, {requestState: req.body.requestState}, {new: true}, function(err, model) {
+      if(err) {
+        throw err;
+      } else {
+        return res.status(200).json(model);
+      }
+    });
+  },
+
   diagnoseCar: (req, res, next) => {
     CarIssueModel.find({ carOwner: req.params.userid }, (err, carIssue) => {
       if (err) {
@@ -125,7 +136,12 @@ const carController = {
               return UserModel.findById(carIssue.carOwner).then((carOwnerDatails) => {
                 return ErrorMasterModel.findById(carIssue.carError).then((carErrorDetails) => {
                   return {
-                    _id: ci._id,
+                    carIssueRequestModelId: ci._id,
+                    requesterCarOwner: ci.requesterCarOwner,
+                    selectedDate: ci.selectedDate,
+                    selectedTime: ci.selectedTime,
+                    requestState: ci.requestState,
+                    createDatetime: ci.createDatetime,
                     carOwnerDatails: {
                       _id: carOwnerDatails._id,
                       name: carOwnerDatails.name,

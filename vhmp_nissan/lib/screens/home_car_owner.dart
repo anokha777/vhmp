@@ -185,14 +185,17 @@ class _HomeCarOwnerState extends State<HomeCarOwner> {
                         heroTag: 'btn2',
                         child: Icon(Icons.mic),
                         onPressed: () {
-                          setState(() {
-                            _isLoading = true;
-                          });
-                          diagnoseMyCar(widget.user_id);
-//                    if (_isAvailable && !_isListening)
-//                      _speechRecognition
-//                          .listen(locale: "en_US")
-//                          .then((result) => print('$result'));
+//                          setState(() {
+//                            _isLoading = true;
+//                          });
+
+//                          diagnoseMyCar(widget.user_id);
+
+                          if (_isAvailable & !_isListening)
+                            _speechRecognition.listen(locale: "en_US").then(
+                                  (result) =>
+                                      print('speech result----- $result'),
+                                );
                         },
                         backgroundColor: Colors.pink,
                       ),

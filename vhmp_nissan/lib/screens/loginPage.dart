@@ -101,6 +101,7 @@ class _LoginPageState extends State<LoginPage> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map data = {'username': username, 'password': password};
     var jsonResponse = null;
+    var serviceCenterDashboardDataJson = null;
 
     var response =
         await http.post("${Constants.BACKEND_URL}/api/user/login", body: data);
@@ -115,6 +116,24 @@ class _LoginPageState extends State<LoginPage> {
         });
         sharedPreferences.setString("token", jsonResponse['token']);
 
+        // get dashboard data if user type is service-center
+        if (jsonResponse['role'] == 'ROLE_SERVICE_CENTER') {
+          var serviceCenterDashboardData = await http.get(
+              "${Constants.BACKEND_URL}/api/car/issue/${jsonResponse['id']}");
+          print(
+              "serviceCenterDashboardData-----${serviceCenterDashboardData.body == ''}");
+          if (serviceCenterDashboardData.body != '') {
+            serviceCenterDashboardDataJson =
+                json.decode(serviceCenterDashboardData.body);
+          } else {
+            serviceCenterDashboardDataJson = [];
+          }
+          print(
+              'serviceCenterDashboardDataJson--------$serviceCenterDashboardDataJson');
+          print(
+              'serviceCenterDashboardDataJson type---------${serviceCenterDashboardDataJson.runtimeType}');
+        }
+
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
           builder: (BuildContext context) {
             return jsonResponse['role'] == 'ROLE_SERVICE_CENTER'
@@ -124,7 +143,8 @@ class _LoginPageState extends State<LoginPage> {
                     jsonResponse['mobileNum'],
                     jsonResponse['username'],
                     jsonResponse['role'],
-                    jsonResponse['address'])
+                    jsonResponse['address'],
+                    serviceCenterDashboardDataJson)
                 : new HomeCarOwner(
                     jsonResponse['id'],
                     jsonResponse['name'],
