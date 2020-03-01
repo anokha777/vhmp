@@ -286,8 +286,10 @@ class ScheduleAnAppointmentState extends State<ScheduleAnAppointment> {
 //        setState(() {
 //          _isLoading = false;
 //        });
-        showMyDialog("Schedule Appointment Success!",
-            "Thankyou, Your appointment is confirmed!", context);
+        showMyDialog(
+            "Schedule Appointment Success!",
+            "Thankyou, Your appointment request is sent to Service center!",
+            context);
       }
     } else {
 //      setState(() {

@@ -1,3 +1,6 @@
 # To clean cache
 1. rm -rf ~/.gradle/caches/
 2. flutter clean
+
+cd /Users/braanokh/Documents/learning/nissan-hackethon/documents
+ssh -i nissan-hackathon-hkr3rr.pem ec2-user@13.127.13.217

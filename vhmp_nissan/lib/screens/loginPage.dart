@@ -55,8 +55,7 @@ class _LoginPageState extends State<LoginPage> {
         .copyWith(statusBarColor: Colors.transparent));
     return Scaffold(
       appBar: AppBar(
-        title: Text("Vehicle Health Monitoring",
-            style: TextStyle(color: Colors.white)),
+        title: Text("OBD AMS", style: TextStyle(color: Colors.white)),
         actions: <Widget>[
           FlatButton(
             onPressed: () {
@@ -490,7 +489,7 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       margin: EdgeInsets.only(top: 10.0),
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
-      child: Text("VHM & P Login",
+      child: Text("OBD Automobile Monitoring System Login",
           style: TextStyle(
               color: Colors.white70,
               fontSize: 30.0,
@@ -502,7 +501,7 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       margin: EdgeInsets.only(top: 10.0),
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
-      child: Text("VHM & P Signup",
+      child: Text("OBD Automobile Monitoring System Signup",
           style: TextStyle(
               color: Colors.white70,
               fontSize: 30.0,

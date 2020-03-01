@@ -28,6 +28,9 @@ appRouter.route('/car/issue/:userid') // userid is of service center
 appRouter.route('/car/issuelistforowner/:userid') // userid is of car owner
   .get(carController.getMyCarIssueRequestList);
 
+appRouter.route('/car/issuehistorylistforowner/:userid') // userid is of car owner
+  .get(carController.getCarIssueHistoryListForCarOwner);
+
 appRouter.route('/car/appointmentupdate/:carIssueRequestModelId') // userid is of car owner
   .put(carController.updateCarAppointmentState);
 

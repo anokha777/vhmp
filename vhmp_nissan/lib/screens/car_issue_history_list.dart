@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'car_issue_history_list.dart';
+import 'package:jiffy/jiffy.dart';
 
-import 'home_car_owner.dart';
-import 'car_issue_detail.dart';
+import 'diagnose_response_list.dart';
+
 import 'loginPage.dart';
-import '../utils/get_my_past_appointment_list.dart';
-import '../utils/constants.dart' as Constants;
+import 'home_car_owner.dart';
 
-class DiagnoseResponseList extends StatelessWidget {
+import '../utils/get_my_past_appointment_list.dart';
+
+class CarIssueHistoryList extends StatelessWidget {
   String user_id;
   String name;
   String mobileNum;
@@ -17,39 +16,40 @@ class DiagnoseResponseList extends StatelessWidget {
   String role;
   String vehicleModel;
   List<dynamic> diagnoseJsonResponse;
+  List<dynamic> carIssueList;
 
-  DiagnoseResponseList(this.user_id, this.name, this.mobileNum, this.username,
-      this.role, this.vehicleModel, this.diagnoseJsonResponse);
+  CarIssueHistoryList(
+      this.user_id,
+      this.name,
+      this.mobileNum,
+      this.username,
+      this.role,
+      this.vehicleModel,
+      this.diagnoseJsonResponse,
+      this.carIssueList);
 
-  _getCarIssueHistoryListForCarOwner(
-      String user_id, BuildContext context) async {
-    var jsonResponse = null;
-    var response = await http.get(
-        "${Constants.BACKEND_URL}/api/car/issuehistorylistforowner/$user_id");
-
-    if (response.statusCode == 200) {
-      jsonResponse = json.decode(response.body);
-//      print('Response status: ${response.statusCode}');
-      print('Response body-----------------------: $jsonResponse');
-
-      if (jsonResponse != null) {
-        print('jsonResponse.runtimeType----------- ${jsonResponse.length}');
-
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-          builder: (BuildContext context) {
-            return new CarIssueHistoryList(user_id, name, mobileNum, username,
-                role, vehicleModel, diagnoseJsonResponse, jsonResponse);
-          },
-        ), (Route<dynamic> route) => false);
-      }
-    }
+  _backToDiagnoseList(
+      String user_id,
+      String name,
+      String mobileNum,
+      String username,
+      String role,
+      String vehicleModel,
+      List<dynamic> diagnoseJsonResponse,
+      context) {
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+      builder: (BuildContext context) {
+        return new DiagnoseResponseList(user_id, name, mobileNum, username,
+            role, vehicleModel, diagnoseJsonResponse);
+      },
+    ), (Route<dynamic> route) => false);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Issues list", style: TextStyle(color: Colors.white)),
+        title: Text("Issue History", style: TextStyle(color: Colors.white)),
         actions: <Widget>[
           FlatButton(
             onPressed: () {
@@ -102,35 +102,28 @@ class DiagnoseResponseList extends StatelessWidget {
         ),
       ),
       body: new ListView.builder(
-        itemCount:
-            diagnoseJsonResponse == null ? 0 : diagnoseJsonResponse.length,
+        itemCount: carIssueList == null ? 0 : carIssueList.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
             child: ListTile(
               title: Text(
-                diagnoseJsonResponse[index]["carErrorDetails"]["errorCode"],
+                carIssueList[index]["carErrorDetails"]["errorCode"],
               ),
               subtitle: Text(
-                diagnoseJsonResponse[index]["carErrorDetails"]["description"],
+                Jiffy(carIssueList[index]["createDatetime"])
+                    .format("MMMM do yyyy, h:mm:ss a"),
               ),
               trailing: FlatButton(
-                child: const Text('Show History'),
-                onPressed: () =>
-                    _getCarIssueHistoryListForCarOwner(user_id, context),
-              ),
-//              trailing: Icon(Icons.description),
-              onTap: () => Navigator.of(context).push(
-                new MaterialPageRoute(
-                  builder: (BuildContext context) => CarIssueDetails(
-                      user_id,
-                      name,
-                      mobileNum,
-                      username,
-                      role,
-                      vehicleModel,
-                      diagnoseJsonResponse,
-                      index),
-                ),
+                child: const Text('Back'),
+                onPressed: () => _backToDiagnoseList(
+                    user_id,
+                    name,
+                    mobileNum,
+                    username,
+                    role,
+                    vehicleModel,
+                    diagnoseJsonResponse,
+                    context),
               ),
             ),
           );

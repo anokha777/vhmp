@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'dart:io' show Platform;
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'home_car_owner.dart';
 import 'dart:convert';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'nearby_service_center_list.dart';
 import 'loginPage.dart';
@@ -44,7 +46,7 @@ class CarIssueDetails extends StatelessWidget {
         print("No service center---------------------------------------");
         // place alert message here
         showMyDialog(
-            "VHM & P", "We do not find nearby any service center!", context);
+            "OAM System", "We do not find nearby any service center!", context);
       } else {
         Navigator.of(context).push(
           new MaterialPageRoute(
@@ -64,8 +66,34 @@ class CarIssueDetails extends StatelessWidget {
       }
     } else {
       // place error alert
-      showMyDialog("VHM & P",
+      showMyDialog("OAM System",
           "There is server error, please try after some time!", context);
+    }
+  }
+
+  _launchURL(String errorCode) async {
+    if (Platform.isIOS) {
+      if (await canLaunch(
+          'youtube://www.youtube.com/results?search_query=$errorCode')) {
+        await launch(
+            'youtube://www.youtube.com/results?search_query=$errorCode',
+            forceSafariVC: false);
+      } else {
+        if (await canLaunch(
+            'https://www.youtube.com/results?search_query=$errorCode')) {
+          await launch(
+              'https://www.youtube.com/results?search_query=$errorCode');
+        } else {
+          throw 'Could not launch https://www.youtube.com/results?search_query=$errorCode';
+        }
+      }
+    } else {
+      String url = 'https://www.youtube.com/results?search_query=$errorCode';
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not launch $url';
+      }
     }
   }
 
@@ -160,15 +188,25 @@ class CarIssueDetails extends StatelessWidget {
               ButtonBar(
                 children: <Widget>[
                   FlatButton(
-                      child: const Text('Nearby Service Center'),
-                      onPressed: () => _getNearbyServiceCenterList(
-                            diagnoseJsonResponseItem[index]["carIssueId"],
-                            diagnoseJsonResponseItem[index]["carErrorDetails"]
-                                ["errorCode"],
-                            diagnoseJsonResponseItem[index]["carErrorDetails"]
-                                ["description"],
-                            context,
-                          )),
+                    child: const Text('Nearby Service Center'),
+                    onPressed: () => _getNearbyServiceCenterList(
+                      diagnoseJsonResponseItem[index]["carIssueId"],
+                      diagnoseJsonResponseItem[index]["carErrorDetails"]
+                          ["errorCode"],
+                      diagnoseJsonResponseItem[index]["carErrorDetails"]
+                          ["description"],
+                      context,
+                    ),
+                  ),
+                ],
+              ),
+              ButtonBar(
+                children: <Widget>[
+                  FlatButton(
+                    child: const Text('Search in Youtube'),
+                    onPressed: () => _launchURL(diagnoseJsonResponseItem[index]
+                        ["carErrorDetails"]["errorCode"]),
+                  ),
                 ],
               ),
             ],

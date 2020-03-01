@@ -6,6 +6,7 @@ const config = require('../config/config');
 // const ErrorMasterModel = require('../models/ErrorMasterModel');
 const UserModel = require('../models/UserModel');
 const CarIssueRequestModel = require('../models/CarIssueRequestModel');
+const CarErrorHistoryModel = require('../models/CarErrorHistoryModel');
 
 require('../models/CarIssueModel');
 const CarIssueModel= mongoose.model('carissue');
@@ -15,7 +16,6 @@ const ErrorMasterModel= mongoose.model('errormaster');
 
 const carController = {
   updateCarAppointmentState: (req, res, next) => {
-    
       CarIssueRequestModel.findByIdAndUpdate(req.params.carIssueRequestModelId, {requestState: req.body.requestState}, {new: true}, function(err, model) {
       if(err) {
         throw err;
@@ -46,26 +46,9 @@ const carController = {
               },
               carErrorDetails
             }
-            // ,
-            // {
-            //   id: 'carIssue[0]._id',
-            //   carOwnerDatail: {
-            //     id: 'carOwnerDatails._id',
-            //     name: 'carOwnerDatails.name',
-            //     mobileNum: 'carOwnerDatails.mobileNum',
-            //     username: 'carOwnerDatails.username',
-            //     role: 'carOwnerDatails.role', 
-            //     vehicleModel: 'carOwnerDatails.vehicleModel'
-            //   },
-            //   carErrorDetails: {
-            //     errorCode: 'errorCode',
-            //     description: 'description'
-            //   }
-            // }
           ]);
           });
         });
-        
       }
     });
   },
@@ -80,7 +63,11 @@ const carController = {
         requesterCarOwner: req.body.requesterCarOwner,
         selectedDate: req.body.selectedDate,
         selectedTime: req.body.selectedTime
-      }).then(response => {
+      }).then((response) => {
+        CarErrorHistoryModel.create({
+          carIssue: req.body.currentCarIssue,
+          carOwner: req.body.requesterCarOwner
+        });
           res.set('Content-Type', 'application/json');
           res.status(200).send({ response });
       })
@@ -117,7 +104,8 @@ const carController = {
         return Promise.all(myCarIssueRequestList);
       }
     }).then(function(myCarIssueRequestList) {
-      res.send(myCarIssueRequestList);
+      res.set('Content-Type', 'application/json');
+      res.status(200).send(myCarIssueRequestList);
     }).catch(function(error) {
       res.status(500).send('Fetching issue logged by car owner failed...', error);
   });
@@ -129,8 +117,6 @@ const carController = {
       // console.log('carIssueList--------------', carIssueList);
 
         if(carIssueList.length > 0) {
-
-          // let carIssueRequestList = [];
           carIssueList.forEach(function(ci) {
             carIssueRequestList.push(CarIssueModel.findById(ci.currentCarIssue).then((carIssue) => {
               return UserModel.findById(carIssue.carOwner).then((carOwnerDatails) => {
@@ -159,9 +145,53 @@ const carController = {
           return Promise.all(carIssueRequestList);
         }
     }).then(function(carIssueRequestList) {
-        res.send(carIssueRequestList);
+        console.log('carIssueRequestList--------');
+      if(carIssueRequestList) {
+        res.set('Content-Type', 'application/json');
+        res.status(200).send(carIssueRequestList);
+      } else {
+        res.set('Content-Type', 'application/json');
+        res.status(200).send([]);
+      }
+        
       }).catch(function(error) {
         res.status(500).send('Fetching issue logged by car owner failed...', error);
+    });
+  },
+
+  getCarIssueHistoryListForCarOwner: (req, res, next) => {
+    console.log('req.params.userid-------------', req.params.userid);
+    let carIssueHistoryList = [];
+    CarErrorHistoryModel.find({ carOwner: req.params.userid }).then(carIssueHistoryListForCarOwner => {
+      // console.log('carIssueHistoryListForCarOwner--------------', carIssueHistoryListForCarOwner);
+
+        if(carIssueHistoryListForCarOwner.length > 0) {
+          carIssueHistoryListForCarOwner.forEach(function(ci) {
+            carIssueHistoryList.push(CarIssueModel.findById(ci.carIssue).then((carIssue) => {
+              // return UserModel.findById(carIssue.carOwner).then((carOwnerDatails) => {
+                return ErrorMasterModel.findById(carIssue.carError).then((carErrorDetails) => {
+                  return {
+                    carIssueHistoryId: ci._id,
+                    createDatetime: ci.createDatetime,
+                    carErrorDetails
+                  };
+                });
+              // });
+            }));
+          });
+          return Promise.all(carIssueHistoryList);
+        }
+    }).then(function(carIssueHistoryList) {
+      console.log('carIssueHistoryList--------');
+      if(carIssueHistoryList) {
+        res.set('Content-Type', 'application/json');
+        res.status(200).send(carIssueHistoryList);
+      } else {
+        res.set('Content-Type', 'application/json');
+        res.status(200).send([]);
+      }
+      }).catch(function(error) {
+        res.status(500).send('Fetching car issue history for car owner failed...', error);
     });
   }
   

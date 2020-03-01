@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speech_recognition/speech_recognition.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:vhmp_nissan/utils/get_my_past_appointment_list.dart';
 
 import 'loginPage.dart';
 import 'diagnose_response_list.dart';
@@ -66,7 +66,13 @@ class _HomeCarOwnerState extends State<HomeCarOwner> {
 
   @override
   Widget build(BuildContext context) {
-    diagnoseMyCar(String user_id) async {
+    diagnoseMyCar(String user_id, BuildContext context) async {
+      print("I am commig after call-------------$_isListening, $_isAvailable");
+      print("resultText------------------$resultText");
+
+      sleep(const Duration(seconds: 5));
+
+//      if (resultText == "diagnose") {
       var jsonResponse = null;
       var response =
           await http.get("${Constants.BACKEND_URL}/api/car/diagnose/$user_id");
@@ -95,11 +101,12 @@ class _HomeCarOwnerState extends State<HomeCarOwner> {
           ), (Route<dynamic> route) => false);
         }
       }
+//      }
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("VHM & P", style: TextStyle(color: Colors.white)),
+        title: Text("OBD AMS", style: TextStyle(color: Colors.white)),
         actions: <Widget>[
           FlatButton(
             onPressed: () {
@@ -166,21 +173,21 @@ class _HomeCarOwnerState extends State<HomeCarOwner> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      FloatingActionButton(
-                        heroTag: 'btn1',
-                        child: Icon(Icons.cancel),
-                        mini: true,
-                        backgroundColor: Colors.deepOrange,
-                        onPressed: () {
-                          if (_isListening)
-                            _speechRecognition.cancel().then(
-                                  (result) => setState(() {
-                                    _isListening = result;
-                                    resultText = "";
-                                  }),
-                                );
-                        },
-                      ),
+//                      FloatingActionButton(
+//                        heroTag: 'btn1',
+//                        child: Icon(Icons.cancel),
+//                        mini: true,
+//                        backgroundColor: Colors.deepOrange,
+//                        onPressed: () {
+//                          if (_isListening)
+//                            _speechRecognition.cancel().then(
+//                                  (result) => setState(() {
+//                                    _isListening = result;
+//                                    resultText = "";
+//                                  }),
+//                                );
+//                        },
+//                      ),
                       FloatingActionButton(
                         heroTag: 'btn2',
                         child: Icon(Icons.mic),
@@ -194,24 +201,25 @@ class _HomeCarOwnerState extends State<HomeCarOwner> {
                           if (_isAvailable & !_isListening)
                             _speechRecognition.listen(locale: "en_US").then(
                                   (result) =>
-                                      print('speech result----- $result'),
+//                                      print('speech result----- $result'),
+                                      diagnoseMyCar(widget.user_id, context),
                                 );
                         },
                         backgroundColor: Colors.pink,
                       ),
-                      FloatingActionButton(
-                        heroTag: 'btn3',
-                        child: Icon(Icons.stop),
-                        mini: true,
-                        backgroundColor: Colors.deepPurple,
-                        onPressed: () {
-                          if (_isListening)
-                            _speechRecognition.stop().then(
-                                  (result) =>
-                                      setState(() => _isListening = result),
-                                );
-                        },
-                      ),
+//                      FloatingActionButton(
+//                        heroTag: 'btn3',
+//                        child: Icon(Icons.stop),
+//                        mini: true,
+//                        backgroundColor: Colors.deepPurple,
+//                        onPressed: () {
+//                          if (_isListening)
+//                            _speechRecognition.stop().then(
+//                                  (result) =>
+//                                      setState(() => _isListening = result),
+//                                );
+//                        },
+//                      ),
                     ],
                   ),
                   Container(
