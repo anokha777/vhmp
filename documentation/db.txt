@@ -67,3 +67,12 @@ db.errormasters.insert({
   "possibleCauses": "Defective or worn out spark plugs in cylinder 6, Low fuel pressure, Vacuum leak, Defective catalytic converter, Defective fuel injector, Defective coil, Defective camshaft position sensor, Defective crankshaft sensor, Problem with distributor",
   "diagnosticSteps": "Using a scan tool pull codes and see if there are any other besides P0306. Address the others first, Inspect whether there are loose open or short wires in ignition coils in cylinder 6, Inspect whether cylinder 6 spark plugs and their wires are in good condition, Check that fuel pressure is within the recommended range, Inspect fuel injectors to see whether they are in good condition"
 })
+
+db.carissues.insert({
+  carOwner: ObjectId("5e560485c0676a001e4166be"),
+  carError: ObjectId("5e575da8faa112982969ae67"),
+  issueState: "Un-Resolved",
+  createDatetime: ISODate("2020-02-20T07:27:01.846Z")
+})
+
+
